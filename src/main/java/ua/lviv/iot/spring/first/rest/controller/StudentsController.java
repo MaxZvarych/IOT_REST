@@ -54,10 +54,20 @@ public class StudentsController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable("id") Integer studentId) {
-        HttpStatus status = students.put(studentId, getStudent(studentId)) == null
-                ? HttpStatus.NOT_FOUND
-                : HttpStatus.OK;
-        return ResponseEntity.status(status).build();
+        boolean exists = false;
+        List<Student> list = getStudents();
+        
+        for (int i = 0; i < list.size(); i++) {
+            if(studentId.equals(list.get(i).getId())) {
+                exists = true;
+            } 
+        }
+        
+        if(exists) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        
     }
 
 }
