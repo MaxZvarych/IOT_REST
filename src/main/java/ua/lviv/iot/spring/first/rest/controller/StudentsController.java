@@ -53,10 +53,11 @@ public class StudentsController {
     }
 
     @PutMapping(path = "/{id}")
-    public Student updateStudent(final @PathVariable("id") Integer studentId,
-            final @RequestBody Student student) {
-        student.setId(studentId);
-        return students.put(studentId, student);
+    public ResponseEntity<Student> updateStudent(@PathVariable("id") Integer studentId) {
+        HttpStatus status = students.put(studentId, getStudent(studentId)) == null
+                ? HttpStatus.NOT_FOUND
+                : HttpStatus.OK;
+        return ResponseEntity.status(status).build();
     }
 
 }
