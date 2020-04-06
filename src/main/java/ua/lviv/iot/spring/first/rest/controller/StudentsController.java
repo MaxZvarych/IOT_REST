@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.lviv.iot.spring.first.business.StudentService;
@@ -34,8 +35,12 @@ public class StudentsController {
     private StudentService studentService;
 
     @GetMapping
-    public List<Student> getStudents() {
-        return new LinkedList<Student>(students.values());
+    public List<Student> getStudentFirstName(
+            final @RequestParam(name = "firstName", required = false) String firstName) {
+        if (firstName == null) {
+            return studentService.findAll();
+        }
+        return studentService.getAllByFirstName(firstName);
     }
 
     @GetMapping(path = "/{id}")
@@ -57,21 +62,12 @@ public class StudentsController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable("id") Integer studentId) {
-        boolean exists = false;
-        List<Student> list = getStudents();
-
-        for (int i = 0; i < list.size(); i++) {
-            if (studentId.equals(list.get(i).getId())) {
-                exists = true;
-            }
-        }
-
-        if (exists) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
+    public ResponseEntity<Student> updateStudent(@PathVariable("id") Integer studentId,
+            @RequestBody Student student) {
+        student.setId(studentId);
+        HttpStatus status = students.replace(studentId, student) == null ? HttpStatus.NOT_FOUND
+                : HttpStatus.OK;
+        return ResponseEntity.status(status).build();
     }
 
 }

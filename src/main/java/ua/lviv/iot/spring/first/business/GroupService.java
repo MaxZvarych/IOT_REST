@@ -10,10 +10,10 @@ import ua.lviv.iot.spring.first.rest.model.Group;
 
 @Service
 public class GroupService {
-@Autowired
-private GroupRepository groupRepository;
+    @Autowired
+    private GroupRepository groupRepository;
 
-public List<Group> findAll() {
-    return groupRepository.findAll();
-}
+    public List<Group> findAll() {
+        return groupRepository.findAll();
+    }
 }

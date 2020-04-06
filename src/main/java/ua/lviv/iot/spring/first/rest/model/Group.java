@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name="\"group\"")
+@Table(name = "\"group\"")
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,11 +21,11 @@ public class Group {
 
     private String name;
     private int enrollmentYear;
-    
+
     @OneToMany(mappedBy = "group", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("group")
     private Set<Student> students;
-    
+
     public Set<Student> getStudents() {
         return students;
     }
