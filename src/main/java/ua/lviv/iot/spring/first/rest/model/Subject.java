@@ -1,7 +1,6 @@
 package ua.lviv.iot.spring.first.rest.model;
 
 import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,6 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY)
