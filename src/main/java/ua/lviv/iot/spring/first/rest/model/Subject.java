@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Subject {
@@ -18,11 +19,15 @@ public class Subject {
     private Integer id;
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "Student_Subjects", joinColumns = {
             @JoinColumn(name = "subject_id", nullable = false) }, inverseJoinColumns = {
                     @JoinColumn(name = "student_id", nullable = false) })
+    @JsonIgnoreProperties("subjects")
     private Set<Student> students;
+
+    public Subject() {
+    }
 
     public Integer getId() {
         return id;
@@ -46,10 +51,6 @@ public class Subject {
 
     public void setStudents(Set<Student> students) {
         this.students = students;
-    }
-
-    public Subject() {
-        super();
     }
 
 }

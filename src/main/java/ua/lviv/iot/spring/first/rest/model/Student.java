@@ -31,6 +31,9 @@ public class Student {
     @ManyToMany(mappedBy = "students")
     private Set<Subject> subjects;
 
+    public Student() {
+    }
+
     public Set<Subject> getSubjects() {
         return subjects;
     }
@@ -67,10 +70,6 @@ public class Student {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Student() {
-
     }
 
     public Group getGroup() {

@@ -1,8 +1,6 @@
 package ua.lviv.iot.spring.first.rest.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,13 +21,11 @@ import ua.lviv.iot.spring.first.rest.model.Student;
 @RestController
 public class StudentsController {
 
-    private Map<Integer, Student> students = new HashMap<>();
-
     @Autowired
     private StudentService studentService;
 
     @GetMapping
-    public List<Student> getStudentFirstName(
+    public List<Student> getStudents(
             final @RequestParam(name = "firstName", required = false) String firstName) {
         if (firstName == null) {
             return studentService.findAll();
@@ -38,8 +34,8 @@ public class StudentsController {
     }
 
     @GetMapping(path = "/{id}")
-    public Student getStudent(final @PathVariable("id") Integer studentId) {
-        return students.get(studentId);
+    public Student getStudent(@PathVariable("id") Integer id) {
+        return studentService.find(id);
     }
 
     @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -50,18 +46,24 @@ public class StudentsController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable("id") Integer studentId) {
-        HttpStatus status = students.remove(studentId) == null ? HttpStatus.NOT_FOUND
-                : HttpStatus.OK;
-        return ResponseEntity.status(status).build();
+        if (studentService.find(studentId) != null) {
+            studentService.deleteStudent(studentId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable("id") Integer studentId,
             @RequestBody Student student) {
-        student.setId(studentId);
-        HttpStatus status = students.replace(studentId, student) == null ? HttpStatus.NOT_FOUND
-                : HttpStatus.OK;
-        return ResponseEntity.status(status).build();
+        if (studentService.find(studentId) != null) {
+            student.setId(studentId);
+            return new ResponseEntity<>(studentService.updateStudent(studentId, student),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

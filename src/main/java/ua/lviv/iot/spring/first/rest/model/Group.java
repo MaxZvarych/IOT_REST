@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "\"group\"")
 public class Group {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Integer id;
     private String name;
     private int enrollmentYear;
@@ -23,16 +23,15 @@ public class Group {
     @JsonIgnoreProperties("group")
     private Set<Student> students;
 
+    public Group() {
+    }
+
     public Set<Student> getStudents() {
         return students;
     }
 
     public void setStudents(Set<Student> students) {
         this.students = students;
-    }
-
-    public Group() {
-        super();
     }
 
     public Integer getId() {

@@ -22,4 +22,22 @@ public class StudentService {
     public List<Student> findAll() {
         return studentRepository.findAll();
     }
+
+    public Student find(Integer id) {
+        return studentRepository.findById(id).get();
+    }
+
+    public void deleteStudent(Integer id) {
+        if (studentRepository.findById(id).isPresent()) {
+            studentRepository.deleteById(id);
+        }
+    }
+
+    public Student updateStudent(Integer id, Student student) {
+        if (studentRepository.findById(id).isPresent()) {
+            return studentRepository.save(student);
+        } else {
+            return null;
+        }
+    }
 }
